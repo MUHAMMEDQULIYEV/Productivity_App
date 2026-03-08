@@ -25,7 +25,7 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-async function request(method, path, body = null, isFormData = false) {
+async function request(method, path, body = null, isFormData = false, opts = {}) {
   const options = {
     method,
     headers: isFormData ? {} : { 'Content-Type': 'application/json' },
@@ -42,7 +42,7 @@ async function request(method, path, body = null, isFormData = false) {
       const err = await res.json();
       detail = err.detail || detail;
     } catch (_) { /* ignore */ }
-    showToast(detail, 'error');
+    if (!opts.silent) showToast(detail, 'error');
     throw new Error(detail);
   }
 
@@ -51,11 +51,11 @@ async function request(method, path, body = null, isFormData = false) {
 }
 
 export const api = {
-  get: (path) => request('GET', path),
-  post: (path, body) => request('POST', path, body),
-  put: (path, body) => request('PUT', path, body),
-  del: (path) => request('DELETE', path),
-  upload: (path, formData) => request('POST', path, formData, true),
+  get: (path, opts) => request('GET', path, null, false, opts),
+  post: (path, body, opts) => request('POST', path, body, false, opts),
+  put: (path, body, opts) => request('PUT', path, body, false, opts),
+  del: (path, opts) => request('DELETE', path, null, false, opts),
+  upload: (path, formData, opts) => request('POST', path, formData, true, opts),
 };
 
 export { showToast };

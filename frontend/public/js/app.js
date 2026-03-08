@@ -34,9 +34,9 @@ async function renderDashboard() {
 
   try {
     const [dashboard, recs, upcoming] = await Promise.all([
-      api.get('/analytics/dashboard'),
-      api.get('/analytics/recommendations'),
-      api.get('/tasks/upcoming'),
+      api.get('/analytics/dashboard', { silent: true }),
+      api.get('/analytics/recommendations', { silent: true }),
+      api.get('/tasks/upcoming', { silent: true }),
     ]);
 
     document.getElementById('dash-loading').classList.add('hidden');
