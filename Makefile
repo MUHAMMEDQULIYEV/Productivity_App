@@ -1,22 +1,25 @@
+# Auto-detect Docker Compose command: V2 plugin ("docker compose") or V1 standalone ("docker-compose")
+DOCKER_COMPOSE := $(shell docker compose version > /dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
+
 .PHONY: up down build logs migrate shell-backend shell-db
 
 up:
-	docker compose up -d
+	$(DOCKER_COMPOSE) up -d
 
 down:
-	docker compose down
+	$(DOCKER_COMPOSE) down
 
 build:
-	docker compose build
+	$(DOCKER_COMPOSE) build
 
 logs:
-	docker compose logs -f
+	$(DOCKER_COMPOSE) logs -f
 
 migrate:
-	docker compose exec backend alembic upgrade head
+	$(DOCKER_COMPOSE) exec backend alembic upgrade head
 
 shell-backend:
-	docker compose exec backend bash
+	$(DOCKER_COMPOSE) exec backend bash
 
 shell-db:
-	docker compose exec db psql -U postgres -d productivity
+	$(DOCKER_COMPOSE) exec db psql -U postgres -d productivity
