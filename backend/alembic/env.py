@@ -19,12 +19,16 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+from config import settings  # noqa: E402
 from database import Base  # noqa: E402
 
 # Import models so their tables are registered on Base.metadata
 import models  # noqa: E402, F401
 
 target_metadata = Base.metadata
+
+# Override the alembic.ini URL with the runtime DATABASE_URL from environment
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 
 def run_migrations_offline() -> None:

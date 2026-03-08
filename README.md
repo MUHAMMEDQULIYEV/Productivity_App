@@ -135,6 +135,8 @@ Hot-reload is enabled by default via `docker-compose.override.yml`:
 - **Backend** — Uvicorn reloads on Python file changes (volume-mounted `./backend`)
 - **Frontend** — Nginx serves from volume-mounted `./frontend/public` so JS/HTML/CSS changes are reflected immediately on refresh
 
+> **Note:** This project uses Docker Compose v2 (`docker compose` plugin). All `make` commands use the `docker compose` syntax. If you have an older Docker installation that only provides the standalone `docker-compose` (v1), please upgrade to a recent version of Docker Desktop or Docker Engine.
+
 ---
 
 ## ngrok Tunnelling (optional)
@@ -157,8 +159,8 @@ make down && make up
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DATABASE_URL` | `postgresql+asyncpg://postgres:postgres@localhost:5432/productivity` | Async PostgreSQL DSN |
-| `REDIS_URL` | `redis://localhost:6379/0` | Redis URL |
+| `DATABASE_URL` | `postgresql+asyncpg://postgres:postgres@db:5432/productivity` | Async PostgreSQL DSN (use `db` for Docker, `localhost` for host) |
+| `REDIS_URL` | `redis://redis:6379/0` | Redis URL (use `redis` for Docker, `localhost` for host) |
 | `SECRET_KEY` | `change-me-in-production` | JWT signing key |
 | `SMTP_HOST` | `smtp.gmail.com` | SMTP server host |
 | `SMTP_PORT` | `587` | SMTP server port |
