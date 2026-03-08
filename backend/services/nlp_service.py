@@ -14,9 +14,14 @@ def _ensure_nltk() -> None:
     global _NLTK_READY
     if _NLTK_READY:
         return
-    for resource in ("punkt", "averaged_perceptron_tagger", "stopwords"):
+    resource_paths = {
+        "punkt": "tokenizers/punkt",
+        "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
+        "stopwords": "corpora/stopwords",
+    }
+    for resource, path in resource_paths.items():
         try:
-            nltk.data.find(f"tokenizers/{resource}" if resource == "punkt" else resource)
+            nltk.data.find(path)
         except LookupError:
             nltk.download(resource, quiet=True)
     _NLTK_READY = True

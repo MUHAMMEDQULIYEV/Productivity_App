@@ -15,21 +15,23 @@ depends_on = None
 
 def upgrade() -> None:
     # ── Enums ─────────────────────────────────────────────────────────────────
+    # create_type is omitted (defaults True) so the ENUM type is created in the DB.
+    # checkfirst=True makes the call idempotent.
     task_category = postgresql.ENUM(
-        "work", "study", "learning", "personal", name="task_category", create_type=False
+        "work", "study", "learning", "personal", name="task_category"
     )
     task_priority = postgresql.ENUM(
-        "high", "medium", "low", name="task_priority", create_type=False
+        "high", "medium", "low", name="task_priority"
     )
     task_status = postgresql.ENUM(
         "not_started", "in_progress", "completed", "archived",
-        name="task_status", create_type=False
+        name="task_status"
     )
     deck_language = postgresql.ENUM(
-        "english", "korean", name="deck_language", create_type=False
+        "english", "korean", name="deck_language"
     )
     deck_source_type = postgresql.ENUM(
-        "youtube", "manual", "upload", name="deck_source_type", create_type=False
+        "youtube", "manual", "upload", name="deck_source_type"
     )
 
     for enum in (task_category, task_priority, task_status, deck_language, deck_source_type):

@@ -136,7 +136,10 @@ export async function renderLanguage() {
   document.getElementById('save-selected-btn').addEventListener('click', async () => {
     const checked = [...document.querySelectorAll('.word-check:checked')];
     if (!checked.length) return showToast('Select at least one word', 'error');
-    const items = checked.map((c) => extractedWords[Number(c.dataset.idx)]);
+    const items = checked
+      .map((c) => extractedWords[Number(c.dataset.idx)])
+      .filter((item) => item !== undefined);
+    if (!items.length) return showToast('No valid words selected', 'error');
     await api.post('/language/vocabulary/save', {
       items,
       language: 'english',
