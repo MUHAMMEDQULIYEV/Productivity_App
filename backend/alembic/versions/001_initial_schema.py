@@ -15,8 +15,6 @@ depends_on = None
 
 def upgrade() -> None:
     # ── Enums ─────────────────────────────────────────────────────────────────
-    # create_type is omitted (defaults True) so the ENUM type is created in the DB.
-    # checkfirst=True makes the call idempotent.
     task_category = postgresql.ENUM(
         "work", "study", "learning", "personal", name="task_category"
     )
@@ -34,19 +32,16 @@ def upgrade() -> None:
         "youtube", "manual", "upload", name="deck_source_type"
     )
 
-    for enum in (task_category, task_priority, task_status, deck_language, deck_source_type):
-        enum.create(op.get_bind(), checkfirst=True)
-
     # ── tasks ─────────────────────────────────────────────────────────────────
     op.create_table(
         "tasks",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("title", sa.String(255), nullable=False),
         sa.Column("description", sa.Text, nullable=True),
-        sa.Column("category", sa.Enum(name="task_category"), nullable=False, server_default="personal"),
+        sa.Column("category", task_category, nullable=False, server_default="personal"),
         sa.Column("deadline", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("priority", sa.Enum(name="task_priority"), nullable=False, server_default="medium"),
-        sa.Column("status", sa.Enum(name="task_status"), nullable=False, server_default="not_started"),
+        sa.Column("priority", task_priority, nullable=False, server_default="medium"),
+        sa.Column("status", task_status, nullable=False, server_default="not_started"),
         sa.Column("estimated_duration", sa.Integer, nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
@@ -68,8 +63,8 @@ def upgrade() -> None:
         "flashcard_decks",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("name", sa.String(255), nullable=False),
-        sa.Column("language", sa.Enum(name="deck_language"), nullable=False, server_default="english"),
-        sa.Column("source_type", sa.Enum(name="deck_source_type"), nullable=False, server_default="manual"),
+        sa.Column("language", deck_language, nullable=False, server_default="english"),
+        sa.Column("source_type", deck_source_type, nullable=False, server_default="manual"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 

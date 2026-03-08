@@ -31,7 +31,7 @@ async def create_deck(payload: DeckCreate, db: AsyncSession = Depends(get_db)) -
     deck = FlashcardDeck(**payload.model_dump())
     db.add(deck)
     await db.flush()
-    await db.refresh(deck)
+    await db.refresh(deck, ["cards"])
     return DeckOut.model_validate(deck)
 
 
