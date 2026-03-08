@@ -1,0 +1,53 @@
+/* Minimal custom styles — Tailwind handles the rest */
+
+/* Card flip animation for flashcards */
+.flip-card {
+  perspective: 1000px;
+  width: 100%;
+  min-height: 220px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  min-height: 220px;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  min-height: 220px;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Active nav link highlight */
+.nav-link.active {
+  background-color: rgb(99 102 241 / 0.15);
+  color: rgb(99 102 241);
+  font-weight: 600;
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }

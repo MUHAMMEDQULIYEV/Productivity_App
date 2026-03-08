@@ -1,0 +1,19 @@
+# docker-compose.override.yml — Development overrides (hot-reload, volume mounts)
+# This file is merged automatically with docker-compose.yml by Docker Compose.
+
+version: "3.9"
+
+services:
+  backend:
+    command: uvicorn main:app --host 0.0.0.0 --port 5000 --reload
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    # In development, serve through nginx but mount the public directory for
+    # instant file changes without rebuilding the image.
+    volumes:
+      - ./frontend/public:/usr/share/nginx/html:ro
